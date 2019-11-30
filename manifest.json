@@ -1,0 +1,18 @@
+{
+    "background_color": "#0D47A1",
+    "description": "",
+    "display": "standalone",
+    "icons": [
+      {
+        "src": "https://rh-utensils.github.io/MusicPlayer/Logo.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+
+    ],
+    "name": "RH Music Player",
+    "short_name": "Music Player",
+    "start_url": "./index.html",
+    "theme_color": "#0D47A1",
+    "scope": "./"
+}
