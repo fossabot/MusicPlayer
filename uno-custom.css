@@ -5,20 +5,20 @@
 
 .uno-loader progress::-moz-progress-bar {
     /* Firefox */
-    background-color: var(--accent-color, #00695C) !important;
+    background-color: var(--accent-color, #2E7D32) !important;
 }
 
 .uno-loader progress::-webkit-progress-value {
     /* Chrome & Safari */
-    background-color: var(--accent-color, #00695C) !important;
+    background-color: var(--accent-color, #2E7D32) !important;
 }
 
 .uno-loader[loading-position='top'] progress {
-    color: var(--accent-color, #00695C) !important;
+    color: var(--accent-color, #2E7D32) !important;
 }
 
 .uno-loader[loading-alert] .alert {
     /* Position */
-    color: var(--accent-color, #00695C) !important;
+    color: var(--accent-color, #2E7D32) !important;
     background: #0D47A1 !important;
 }
