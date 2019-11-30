@@ -9,11 +9,6 @@
 }
 
     .uno-loader .logo {
-        width: auto;
-        height: auto;
-        /* Protect the width and height of the logo to fit the screen */
-        max-width: 70vw;
-        max-height: 70vh;
         /* Center the logo */
         position: absolute;
         top: 50%;
