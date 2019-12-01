@@ -1,10 +1,11 @@
 h1 {
     color: white;
+    text-align: center;
+    font-family: "Roboto", Sans-serif;
     position: absolute;
     bottom: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: "Roboto", Sans-serif;
   }
 .uno-loader {
     /* Main container of the loader */
