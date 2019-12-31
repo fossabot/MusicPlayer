@@ -1,0 +1,587 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta content='IE=8' http-equiv='X-UA-Compatible'>
+        <title>Frequcency analysis using HTML5 Audio and Web Audio API</title>
+        <meta name="viewport" content="width=device-width">
+        <!-- Das favicon.ico und das apple-touch-icon.png in das root Verzeichnis -->
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css' /> 
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <input type="file" id="input" onchange="handleFiles(this.files)" />
+
+
+        <button type="button" onClick="playpause()">Play / Pause</button>
+        <button type="button" onClick="setCurrentTime(20)">Set Time</button>
+        <button type="button" onClick="playRadio()">Play Radio</button>
+
+        <span id="loading"></span>
+        <div id="song_info_wrapper">
+            <div id="artist">Unknown Artist</div>
+            <div id="title">Unknown Titel</div>
+            <div id="album">Unknown Album</div>
+        </div>
+        <canvas id="freq" width="1024" height="525"></canvas>
+
+        <style>
+            @keyframes hue {
+              0% {
+                filter: hue-rotate(0deg);
+                -webkit-filter: hue-rotate(0deg);
+              }
+            
+              100% {
+                filter: hue-rotate(-360deg);
+                -webkit-filter: hue-rotate(-360deg);
+              }
+            }
+            #freq {
+                background: linear-gradient(#0D47A1, #4A148C);
+                position: absolute; 
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+            body {
+                background:#000;
+                overflow: hidden;
+            }
+            #freq.animateHue, body.animateHue {
+                animation-name: hue;
+                animation-duration: 500s;
+                animation-delay: 1s;
+                animation-iteration-count: infinite;
+            
+                -webkit-animation-name: hue;
+                -webkit-animation-duration: 500s;
+                -webkit-animation-delay: 1s;
+                -webkit-animation-iteration-count: infinite;
+            }
+            #title, #artist, #album {
+                position: relative;
+                text-align: center;
+                width: 100%;
+                z-index: 999;
+                font-weight: 100;
+                font-family: "Roboto", sans-serif;
+                /*font-size: 100px;*/
+                color: #fff;
+                visibility: hidden;
+                letter-spacing: -.05em;
+                text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+            	margin-bottom: 15px;
+            }
+            #song_info_wrapper {
+            	position: absolute;
+            	width: 100%;
+            	text-align: center; 
+            }
+            
+            #title {
+            	font-size: 10vw;
+            }
+            
+            #artist {
+                font-size: 3vw;
+            }
+            #album {
+                font-size: 3vw;
+            	/*font-size: 40px;*/
+            	margin-bottom: 0;
+            }
+            
+            input, button, #loading {
+            	position: absolute;
+            	top: 10px;
+            	left: 5px;
+                display: block;
+                z-index: 999;
+                
+            }
+            
+            #loading {
+            	display: inline-block;
+            	top: 44px; 
+            	left: 110px;
+            	font-family: "Roboto", sans-serif; 
+            	font-size: 12px;
+            }
+            
+            html, body {
+              width:  100%;
+              height: 100%;
+              margin: 0px;
+            }
+            
+            @media screen and (min-width: 1000px) {
+            	#title {
+            		font-size: 100px;
+            	}
+            
+            	#artist, #album {
+            		font-size: 40px;
+            	}
+            }
+            
+            @media screen and (max-width: 500px) {
+            	#artist, #album {
+            		font-weight: 300;
+            		font-size: 4vw;
+            	}
+            }
+            
+            @media screen and (max-width: 436px) {
+            	#artist, #album {
+            		font-weight: 300;
+            		font-size: 4.5vw;
+            	}
+            	
+            	#title {
+            		
+            	}
+            }
+        </style>
+
+        <script>
+            var rafID = null;
+            var analyser = null;
+            var c = null;
+            var ctx = null;
+            
+            var loader;
+            var fileChosen = false;
+            var stream = false;
+            
+            var startedAt = 0;
+            var pausedAt = 0;
+            var playing = false;
+            
+            var url;
+            var buffer;
+            
+            var AudioContext = AudioContext || webkitAudioContext;
+            
+            var context = new AudioContext();
+            
+            if (!window.requestAnimationFrame)
+            	window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+            
+            $(function () {
+            	"use strict";
+            	loader = new BufferLoader();
+            	initBinCanvas();	
+            });
+            
+            function handleFiles(files, tmpStream = false) {
+            	if (playing) stop();
+            	if(files.length === 0) return;
+            
+            	stream = tmpStream
+            	fileChosen = true;
+            	
+            	if(!stream)
+            	{
+            		analyser = context.createAnalyser();
+            		sourceNode = context.createBufferSource();	
+            		
+            		sourceNode.connect(analyser);
+            		sourceNode.connect(context.destination);
+            		
+            		rafID = window.requestAnimationFrame(updateVisualization);
+            
+            		var request = new XMLHttpRequest();
+            
+            		console.log(files)
+            
+            		url = URL.createObjectURL(files[0]); 
+            		//url = files;
+            
+            		request.addEventListener("progress", updateProgress);
+            		request.addEventListener("load", transferComplete);
+            		request.addEventListener("error", transferFailed);
+            		request.addEventListener("abort", transferCanceled);
+            
+            		request.open('GET', url, true);
+            		request.responseType = 'arraybuffer';
+            
+            		request.onload = function() {
+            			context.decodeAudioData(request.response, function(tmpBuffer) {
+            				buffer = tmpBuffer
+            				
+            				sourceNode.buffer = buffer;
+            				sourceNode.start(0);
+            				
+            				startedAt = context.currentTime;
+            				pausedAt = 0;
+            				playing = true;
+            				
+            				$("#freq, body").addClass("animateHue");
+            			}, function(e) {
+            				console.log(e);
+            			});
+            		};
+            
+            		request.send();
+            	}
+            	else
+            	{
+            		url = files;
+            
+            		var audio = new Audio(url)
+            		audio.crossOrigin = 'anonymous';
+            		audio.play();
+            
+            		sourceNode = context.createMediaElementSource(audio);
+            
+            		analyser = context.createAnalyser();
+            
+            		sourceNode.connect(analyser);
+            		sourceNode.connect(context.destination);
+            
+            		rafID = window.requestAnimationFrame(updateVisualization)
+            
+            		startedAt = context.currentTime;
+            		pausedAt = 0;
+            		playing = true;
+            
+            		$("#freq, body").addClass("animateHue");
+            	}
+            
+            	onWindowResize();
+            }
+            
+            function updateProgress (oEvent) {
+              if (oEvent.lengthComputable) {
+                var percentComplete = oEvent.loaded / oEvent.total;
+            	console.log("Loading music file... " + Math.floor(percentComplete * 100) + "%");
+            	$("#loading").html("Loading... " + Math.floor(percentComplete * 100) + "%");
+              } else {
+            	  console.log("Unable to compute progress info.");
+              }
+            }
+            
+            function transferComplete(evt) {
+              	console.log("The transfer is complete.");
+            	$("#loading").html("");
+            }
+            
+            function transferFailed(evt) {
+              	console.log("An error occurred while transferring the file.");
+            	$("#loading").html("Loading failed.");
+            }
+            
+            function transferCanceled(evt) {
+              	console.log("The transfer has been canceled by the user.");
+            	$("#loading").html("Loading canceled.");
+            }
+            
+            function initBinCanvas () {
+            	//add new canvas
+            	"use strict";
+            	c = document.getElementById("freq");
+            	c.width = window.innerWidth;
+                c.height = window.innerHeight;
+            	//get context from canvas for drawing
+            	ctx = c.getContext("2d");
+            	
+            	ctx.canvas.width  = window.innerWidth;
+              	ctx.canvas.height = window.innerHeight;
+            	
+            	window.addEventListener( 'resize', onWindowResize, false );
+            	
+            	//create gradient for the bins
+            	var gradient = ctx.createLinearGradient(0, c.height - 300,0,window.innerHeight - 25);
+            	gradient.addColorStop(1,'#00f'); //black
+            	gradient.addColorStop(0.75,'#f00'); //red
+            	gradient.addColorStop(0.25,'#f00'); //yellow
+            	gradient.addColorStop(0,'#ffff00'); //white
+            
+            	ctx.fillStyle = "#9c0001";
+            }
+            
+            function onWindowResize() {
+            	ctx.canvas.width  = window.innerWidth;
+              	ctx.canvas.height = window.innerHeight;
+            	
+            	var containerHeight = $("#song_info_wrapper").height();
+            	var topVal = $(window).height() / 2 - containerHeight / 2; 
+            	$("#song_info_wrapper").css("top", topVal);
+            	console.log(topVal);
+            }
+            
+            function updateVisualization () {
+            	if (fileChosen) {
+            		var array = new Uint8Array(analyser.frequencyBinCount);
+            		analyser.getByteFrequencyData(array);
+            
+            		drawBars(array);
+            	}
+            
+            	rafID = window.requestAnimationFrame(updateVisualization);
+            }
+            
+            function drawBars (array) {
+            	var threshold = 0;
+            
+            	ctx.clearRect(0, 0, c.width, c.height);
+            
+            	var maxBinCount = array.length;
+            	var space = 3;
+            		
+            	var size = 450;
+            
+            	ctx.save();
+            
+            	ctx.globalCompositeOperation='source-over';
+            
+            	//console.log(maxBinCount); //--> 1024
+            	ctx.scale(0.5, 0.5);
+            	ctx.translate(window.innerWidth, window.innerHeight);
+            	ctx.fillStyle = "#fff";
+            
+            	var bass = Math.floor(array[1]); //1Hz Frequenz 
+            	var radius = (size / 1000) * $(window).width() <= size ? -(bass * (size / 2000) + (size / 1000) * $(window).width()) : -(bass * (size / 2000) + size);
+            
+            	var bar_length_factor = 1;
+            	if ($(window).width() >= 785) {
+            		bar_length_factor = 1.0;
+            	}
+            	else if ($(window).width() < 785) {
+            		bar_length_factor = 1.5;
+            	}
+            	else if ($(window).width() < 500) {
+            		bar_length_factor = 20.0;
+            	}
+            	console.log($(window).width());
+            
+            	//go over each bin
+            	for ( var i = 0; i < maxBinCount; i++ ){
+            		
+            		var value = array[i];
+            		if (value >= threshold) {			
+            			//draw bin
+            			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
+            			//ctx.fillRect(i * space, c.height, 2, -value);
+            			ctx.fillRect(0, radius, $(window).width() <= size ? 2 : 3, -value / bar_length_factor);
+            			ctx.rotate((180 / 128) * Math.PI/180);   
+            		}
+            	}  
+                    
+            	for ( var i = 0; i < maxBinCount; i++ ){
+            		var value = array[i];
+            		if (value >= threshold) {				
+            			//draw bin
+            			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
+            			//ctx.fillRect(i * space, c.height, 2, -value);
+            			ctx.rotate(-(180 / 128) * Math.PI/180);
+            			ctx.fillRect(0, radius, $(window).width() <= size ? 2 : 3, -value / bar_length_factor);
+            		}
+            	} 
+                    
+            	for ( var i = 0; i < maxBinCount; i++ ){
+            		var value = array[i];
+            		if (value >= threshold) {				
+            			//draw bin
+            			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
+            			//ctx.fillRect(i * space, c.height, 2, -value);
+            			ctx.rotate((180 / 128) * Math.PI/180);
+            			ctx.fillRect(0, radius, $(window).width() <= size ? 2 : 3, -value / bar_length_factor);
+            		}
+            	} 
+                
+            	ctx.restore();
+            }
+            
+            
+            function playpause () {
+            	if(!playing) {		
+            		start();  
+            	}
+            	else {
+            		var elapsed = context.currentTime - startedAt;
+                    stop();
+                    pausedAt = elapsed;
+            	}
+            }
+            
+            function start () {
+            	var offset = pausedAt;
+            
+            	if (!stream)
+            	{
+            		analyser = context.createAnalyser();
+            		sourceNode = context.createBufferSource();	
+            		
+            		sourceNode.connect(analyser);
+            		sourceNode.connect(context.destination);
+            
+            		rafID = window.requestAnimationFrame(updateVisualization);
+            
+            		sourceNode.buffer = buffer;
+            		sourceNode.start(0, offset);
+            
+            		$("#freq, body").addClass("animateHue");
+            	}
+            	else
+            	{
+            		var audio = new Audio(url)
+            		audio.crossOrigin = 'anonymous';
+            		audio.play();
+            
+            		sourceNode = context.createMediaElementSource(audio);
+            
+            		analyser = context.createAnalyser();
+            
+            		sourceNode.connect(analyser);
+            		sourceNode.connect(context.destination);
+            
+            		rafID = window.requestAnimationFrame(updateVisualization)
+            
+            		$("#freq, body").addClass("animateHue");
+            	}
+            
+                startedAt = context.currentTime - offset;
+                pausedAt = 0;
+                playing = true;
+            }
+            
+            function stop () {
+            	if (sourceNode) {          
+            		sourceNode.disconnect();
+            		if (!stream) sourceNode.stop(0);
+            		sourceNode = null;
+            	}
+            	pausedAt = 0;
+            	startedAt = 0;
+            	playing = false;
+            }
+            
+            function getPlaying () {
+            	return playing;
+            };
+            
+            function getCurrentTime () {
+            	if(pausedAt) {
+            		return pausedAt;
+            	}
+            	if(startedAt) {
+            		return context.currentTime - startedAt;
+            	}
+            	return 0;
+            };
+            
+            function setCurrentTime (offset) {
+            	if(playing)
+            	{
+            		stop();
+            		pausedAt = offset;
+            		start();
+            	}
+            	
+            	pausedAt = offset;
+            };
+            
+            function getDuration () {
+            	return buffer.duration;
+            };
+            
+            function setInfos (artist, titel, album) {
+            	$("#title").html(titel);	//recommended ==> max. 8 chars
+            	$("#album").html(album);	//recommended ==> max. 18 chars
+            	$("#artist").html(artist);	//recommended ==> max. 18 characters
+            	$("#title, #artist, #album").css("visibility", "visible");
+            	onWindowResize();
+            }
+            
+            function hideInfos () {
+            	$("#title").html("");
+            	$("#album").html("");
+            	$("#artist").html("");
+            	$("#title, #artist, #album").css("visibility", "hidden");
+            	onWindowResize();
+            }
+            
+            function playRadio () {
+            	handleFiles("https://oe3shoutcast.sf.apa.at/;?type=http&nocache=5489", true);
+            	//handleFiles("https://secureonair.krone.at/kronehit-hd.mp3", true);
+            	//handleFiles("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+            
+            	setInfos("Radio Sender", "Ö3", "Live - On Air");
+            	//setInfos("Radio Sender", "Kronehit", "Live - On Air");
+            };
+
+            var reader;
+            
+            window.AudioContext = window.AudioContext || 
+                                  window.webkitAudioContext;
+            
+            var BufferLoader = function(sources) {
+                this.buffers = { };
+                this.context = null;
+                this.buffer = null;
+                this.init();
+            };
+            
+            BufferLoader.prototype.init = function() {
+              try {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                this.context = new AudioContext();
+              }
+              catch(_) {
+                alert('Web Audio API is not supported in this browser');
+              }
+            };
+            
+            BufferLoader.prototype.onBufferLoadError = function(_) {
+                console.error('Error loading buffer');
+            };
+            
+            BufferLoader.prototype.onBufferLoad = function(bufferName, srcBuffer, callback) {
+                this.context.decodeAudioData(srcBuffer, function onSuccess(buffer) {
+                    this.buffers[bufferName] = buffer;
+                    if (typeof callback === 'function') {			
+            			callback(); // Aufruf der Wiedergabefunktion
+                    }
+                }.bind(this), this.onBufferError);
+            };
+            
+            BufferLoader.prototype.load = function(bufferName, file, callback) {	
+            	reader = new FileReader();
+            	reader.onload = function(data) {
+                    if(data.target && data.target.result) {
+                        this.onBufferLoad(bufferName, data.target.result, callback);
+                    }else{
+                        console.dir(data);
+                    }
+            	}.bind(this);
+            	reader.readAsArrayBuffer(file);
+            };
+            
+            BufferLoader.prototype._playBuffer = function(name, gain, time) {
+                var source = this.context.createBufferSource();
+                source.buffer = this.buffer;
+                
+                var analyser = this.context.createAnalyser();
+            	
+            	
+            	
+                source.connect(analyser);
+                source.connect(this.context.destination);
+                source.start(time);
+            };
+            
+            BufferLoader.prototype.play = function (name, gain, time) {
+                // Default values for time and gain
+                gain = typeof gain !== 'undefined' ? gain : 1;
+                time = typeof time !== 'undefined' ? time : 0;
+            
+                this.buffer = this.buffers[name];
+                if (this.buffer) { this._playBuffer(name, time, gain); }
+                else { throw new Error("Buffer does not exist"); }
+            };
+        </script>
+    </body>
+</html>

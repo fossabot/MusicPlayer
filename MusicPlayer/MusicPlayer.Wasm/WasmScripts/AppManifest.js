@@ -2,6 +2,6 @@
 
     splashScreenImage: "Assets/SplashScreen.scale-200.png",
     splashScreenColor: "#0D47A1",
-    displayName: "MusicPlayer"
+    displayName: "Music Player"
 
 }
