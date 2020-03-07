@@ -1,0 +1,61 @@
+h1 {
+    color: white;
+    text-align: center;
+    font-family: "Roboto", Sans-serif;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.uno-loader {
+    /* Main container of the loader */
+    background-color: var(--bg-color, #0D47A1) !important;
+}
+
+.uno-loader progress::-moz-progress-bar {
+    /* Firefox */
+    background-color: var(--accent-color, #ffa726) !important;
+    border-radius: 10px;
+}
+
+.uno-loader progress::-webkit-progress-bar {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.uno-loader progress::-webkit-progress-value {
+    /* Chrome & Safari */
+    background-color: var(--accent-color, #ffa726) !important;
+    border-radius: 10px;
+}
+
+.uno-loader[loading-position='top'] progress {
+    color: var(--accent-color, #ffa726) !important;
+}
+
+.uno-loader[loading-alert] .alert {
+    color: var(--accent-color, #ffa726) !important;
+    background: #0D47A1 !important;
+}
+
+.uno-loader .customLogo {
+    /* Center the logo */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.uno-loader progress {
+    /* Dimensions */
+    width: 40% !important;
+    height: 15px !important;
+    /* Position */
+    bottom: 30% !important;
+    left: 30% !important;
+    right: 30% !important;
+    background-color: white;
+    border-radius: 13px;
+    padding: 3px;
+}
