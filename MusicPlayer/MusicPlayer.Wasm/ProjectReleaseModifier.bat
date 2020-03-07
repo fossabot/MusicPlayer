@@ -46,7 +46,7 @@ echo.^| Adding RH-Utensils Modded CSS ... ^|
 echo.^\-----------------------------------^/
 echo.
 
-xcopy "%projectFolder%\WasmCSS\RH-Utensils_Mod.css" "%outputFolder%\RH-Utensils_Mod.css" /y
+xcopy "%projectFolder%\WasmCSS\RH-Utensils_Mod.css" "%outputFolder%\RH-Utensils_Mod.css*" /y
 
 echo.
 echo.^/-----------------------------------------------------------^\
@@ -54,7 +54,7 @@ echo.^| ^Replace index.html with RH-Utensils Modded index.html ... ^|
 echo.^\-----------------------------------------------------------^/
 echo.
 
-xcopy "%projectFolder%\WasmHTML\RH-Utensils_Mod.html" "%outputFolder%\index.html" /y
+xcopy "%projectFolder%\WasmHTML\RH-Utensils_Mod.html" "%outputFolder%\index.html*" /y
 
 echo.
 echo.^/--------------------^\
