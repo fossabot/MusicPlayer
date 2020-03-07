@@ -65,6 +65,8 @@
     <Folder Include="$(MSBuildThisFileDirectory)Views\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Assets\Logo.svg" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
