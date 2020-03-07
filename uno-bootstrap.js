@@ -9,7 +9,7 @@ var Module = {
             for (let key in config.environmentVariables) {
                 if (config.environmentVariables.hasOwnProperty(key)) {
                     if (config.enable_debugging) console.log(`Setting ${key}=${config.environmentVariables[key]}`);
-                    ENV[key] = config.environmentVariables[key];
+                    MONO.mono_wasm_setenv(key, config.environmentVariables[key]);
                 }
             }
         }
@@ -35,7 +35,7 @@ var Module = {
             return WebAssembly
                 .instantiate(getBinary(), imports)
                 .then(results => {
-                    successCallback(results.instance);
+                    successCallback(results.instance, results.module);
                 });
         } else if (typeof WebAssembly.instantiateStreaming === 'function') {
             App.fetchWithProgress(
@@ -52,7 +52,7 @@ var Module = {
                                 WebAssembly
                                     .instantiate(buffer, imports)
                                     .then(results => {
-                                        successCallback(results.instance);
+                                        successCallback(results.instance, results.module);
                                     });
                             });
                     }
@@ -60,7 +60,7 @@ var Module = {
                         return WebAssembly
                             .instantiateStreaming(response, imports)
                             .then(results => {
-                                successCallback(results.instance);
+                                successCallback(results.instance, results.module);
                             });
                     }
                 });
@@ -151,13 +151,22 @@ var App = {
             MonoRuntime.init();
             BINDING.bindings_lazy_init();
 
-            if (ENVIRONMENT_IS_NODE) {
-                var mainMethod = BINDING.resolve_method_fqn(config.uno_main);
-                var array = BINDING.js_array_to_mono_array(process.argv);
-                MonoRuntime.call_method(mainMethod, null, [array]);
+            var mainMethod = BINDING.resolve_method_fqn(config.uno_main);
+
+            if (typeof mainMethod === "undefined") {
+                throw `Unable to find entrypoint in ${config.uno_main}`;
             }
-            else {
-                BINDING.call_static_method(config.uno_main, []);
+
+            signature = Module.mono_method_get_call_signature(mainMethod);
+
+            if (signature === "") {
+                BINDING.call_method(mainMethod, null, signature, []);
+            } else {
+                let array = ENVIRONMENT_IS_NODE
+                    ? BINDING.js_array_to_mono_array(process.argv)
+                    : BINDING.js_array_to_mono_array([]);
+
+                MonoRuntime.call_method (mainMethod, null, [array]);
             }
         } catch (e) {
             console.error(e);
@@ -196,7 +205,7 @@ var App = {
         if (manifest && manifest.splashScreenImage) {
             img.setAttribute("src", manifest.splashScreenImage);
         } else {
-            //img.setAttribute("src", "https://nv-assets.azurewebsites.net/logos/uno.png");
+            img.setAttribute("src", "./Assets/Logo.svg");
         }
     },
 

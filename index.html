@@ -1,37 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <link rel="icon" type="image/png" href="./Assets/Logo.png" sizes="96x96">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" type="text/css" href="./uno-custom.css" />
-
     <script defer type="text/javascript" src="./require.js"></script>
     <script type="text/javascript" src="./mono-config.js"></script>
     <script type="text/javascript" src="./uno-config.js"></script>
     <script type="text/javascript" src="./uno-bootstrap.js"></script>
-    <script async type="text/javascript" src="./mono.js"></script>
+    <script async type="text/javascript" src="./dotnet.js"></script>
+    <link rel="stylesheet" type="text/css" href="./Uno.UI.css" />
     <link rel="stylesheet" type="text/css" href="./Uno.UI.css" />
     <link rel="stylesheet" type="text/css" href="./Fonts.css" />
     <link rel="stylesheet" type="text/css" href="./normalize.css" />
     <link rel="stylesheet" type="text/css" href="./uno-bootstrap.css" />
-    
+    <link rel="stylesheet" type="text/css" href="./RH-Utensils_Mod.css" />
 </head>
 <body>
     <div id="uno-body" class="container-fluid uno-body">
-        <div class="uno-loader"
-             loading-position="bottom"
-             loading-alert="none">
-
-             <div>
-                 <img src="./Assets/Logo.svg" height="300" width="300" class="logo"/>
-                 <h1>App wird geladen</h1>
-             </div>
-            
+        <div class="uno-loader" loading-position="bottom" loading-alert="none">
+            <img src="./Assets/Logo.svg" height="300" width="300" class="customLogo" />
             <progress></progress>
+            <h1>App wird geladen</h1>
+
             <span class="alert"></span>
         </div>
     </div>

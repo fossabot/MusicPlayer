@@ -36,3 +36,6 @@ self.addEventListener('fetch', event => {
         }
     }());
 });
+
+
+// managed
