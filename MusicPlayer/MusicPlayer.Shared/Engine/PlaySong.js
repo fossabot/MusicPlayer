@@ -3,16 +3,16 @@
     var audio = document.getElementById("audio");
     var input = document.getElementById("select");
 
-    audio.crossOrigin = 'anonymous';
+    audio.crossOrigin = "anonymous";
 
     var url = URL.createObjectURL(input.files[0]);
 
     if (input.files[0] != null && input.files[0].name.endsWith(".radio")) {
         var fileReader = new FileReader();
-        fileReader.onload = function (e) {
+        fileReader.onload = function(e) {
             audio.src = fileReader.result;
-        } 
-        fileReader.readAsText(input.files[0]); 
+        };
+        fileReader.readAsText(input.files[0]);
     } else {
         audio.src = url;
     }
@@ -45,37 +45,29 @@
     var barWidth;
 
     var barHeight;
+    var barDistance = 10;
     var x;
 
     renderSize();
 
-    window.onresize = function (event) {
+    window.onresize = function(event) {
         renderSize();
     };
 
     function renderSize() {
 
-        if (window.innerWidth > 1300) {
-            canvas.width = (window.innerWidth - 140);
-        } else {
-            canvas.width = (window.innerWidth - 40);
-        }
-
-        
-        canvas.height = window.innerHeight;
+        canvas.width = (window.innerWidth - 40);
+        canvas.height = 700;
 
         WIDTH = canvas.width;
         HEIGHT = canvas.height;
 
-        if (window.innerWidth > 1300) analyser.fftSize = 4096;
-        else if (window.innerWidth > 900) analyser.fftSize = 2048;
-        else if (window.innerWidth > 400) analyser.fftSize = 1024;
-        else analyser.fftSize = 512;
+        analyser.fftSize = 4096;
 
         bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
 
-        barWidth = (WIDTH / bufferLength) * 13;
+        barWidth = 12;
 
         x = 0;
     }
@@ -91,7 +83,7 @@
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
         var r, g, b;
-        var bars = 118;
+        var bars = (WIDTH / (barWidth + barDistance)) - 0.5;
 
         for (let i = 0; i < bars; i++) {
             barHeight = (dataArray[i] * 2.5);
@@ -127,11 +119,12 @@
             ctx.fillStyle = grad;
             ctx.fillRect(x, (HEIGHT - barHeight), barWidth, barHeight);
 
-            x += barWidth + 10;
+            x += barWidth + barDistance;
         }
     }
 
     audio.play();
+
     renderFrame();
 }
 

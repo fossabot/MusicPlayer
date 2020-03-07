@@ -5,10 +5,29 @@
     xmlns:local="using:MusicPlayer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loaded="MainPage_OnLoaded">
+    xmlns:controls="clr-namespace:MusicPlayer.Shared.Controls"
+    mc:Ignorable="d" SizeChanged="MainPage_OnSizeChanged">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Frame x:Name="ContentFrame" IsTabStop="True" />
+    <Grid Background="{ThemeResource SystemChromeLowColor}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Desktop" />
+                <VisualState x:Name="Mobile">
+                    <VisualState.Setters>
+                        <Setter Target="MusicControl.Height" Value="240" />
+                        <Setter Target="ContentGrid.Margin" Value="0,240,0,0" />
+                        <Setter Target="ContentGrid.CornerRadius" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <controls:MusicControl x:Name="MusicControl" Height="330" VerticalAlignment="Top" />
+
+        <Grid x:Name="ContentGrid" Margin="55,250,55,30" CornerRadius="5" Background="{ThemeResource SystemChromeMediumColor}">
+
+            <Button Content="Open File" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Left" CornerRadius="2"
+                    Click="OpenFile_OnClick" />
+
+        </Grid>
     </Grid>
 </Page>

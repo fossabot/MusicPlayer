@@ -1,8 +1,7 @@
 ﻿function Main() {
     var audio = document.getElementById("audio");
 
-    return !audio.paused;
+    return (!audio.paused).toString();
 }
 
 Main();
-
