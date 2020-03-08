@@ -38,16 +38,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getDuration.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getFile.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getPosition.js" />
@@ -65,8 +55,43 @@
     <Folder Include="$(MSBuildThisFileDirectory)Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.svg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-120.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-152.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-167.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-180.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1125-2436.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1136-640.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1242-2208.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1242-2688.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1334-750.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1536-2048.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1668-2224.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1668-2388.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-1792-828.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2048-1536.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2048-2732.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2208-1242.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2224-1668.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2388-1668.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2436-1125.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2688-1242.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-2732-2048.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-640-1136.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-750-1334.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-828-1792.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\favicon-196.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\lockscreenlogo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\manifest-icon-192.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\manifest-icon-512.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\splashscreen.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\square150x150logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\square44x44logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\square44x44logo.targetsize-24_altform-unplated.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\storelogo.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\wide310x150logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.svg" />
   </ItemGroup>
 </Project>

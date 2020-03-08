@@ -17,6 +17,18 @@
     <Content Include="..\MusicPlayer.UWP\Assets\*.png" Link="Assets\%(FileName)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="ServiceWorker\pwabuilder-sw-register.js" />
+    <None Remove="ServiceWorker\pwabuilder-sw.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServiceWorker\pwabuilder-sw-register.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServiceWorker\pwabuilder-sw.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="WasmCSS\Fonts.css" />
     <EmbeddedResource Include="WasmScripts\AppManifest.js" />
   </ItemGroup>
