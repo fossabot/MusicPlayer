@@ -7,12 +7,34 @@
 
     var url = URL.createObjectURL(input.files[0]);
 
+    function PlayYouTube(youtube_url) {
+        $.get("https://youtube.api.hampoelz.net/video_info.php",
+            { url: youtube_url },
+            function(data) {
+                var first = data.find(function(link) {
+                    return link["format"].indexOf("webm, audio") !== -1;
+                });
+
+                var stream_url = "https://youtube.api.hampoelz.net/stream.php?url=" + encodeURIComponent(first["url"]);
+
+                audio.src = stream_url;
+            });
+    }
+
     if (input.files[0] != null && input.files[0].name.endsWith(".radio")) {
         var fileReader = new FileReader();
+
         fileReader.onload = function(e) {
-            audio.src = fileReader.result;
+            if (fileReader.result.match(/watch\?v=([a-zA-Z0-9\-_]+)/)) {
+                PlayYouTube(fileReader.result);
+            } else {
+                audio.src = fileReader.result;
+            }
         };
+
         fileReader.readAsText(input.files[0]);
+    } else if (url.match(/watch\?v=([a-zA-Z0-9\-_]+)/)) {
+        PlayYouTube(url);
     } else {
         audio.src = url;
     }
@@ -123,7 +145,7 @@
         }
     }
 
-    audio.play();
+    //audio.play();
 
     renderFrame();
 }

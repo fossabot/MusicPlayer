@@ -19,15 +19,47 @@
                         <Setter Target="ContentGrid.CornerRadius" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
+                <VisualState x:Name="Phone">
+                    <VisualState.Setters>
+                        <Setter Target="MusicControl.Height" Value="240" />
+                        <Setter Target="ContentGrid.Margin" Value="0,240,0,0" />
+                        <Setter Target="ContentGrid.CornerRadius" Value="0" />
+
+                        <Setter Target="Link.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="PlayLink.(Grid.Column)" Value="0" />
+                        <Setter Target="PlayLink.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="PlayLink.(Grid.Row)" Value="1" />
+                        <Setter Target="PlayLink.HorizontalAlignment" Value="Stretch" />
+
+                        <Setter Target="OpenFile.HorizontalAlignment" Value="Stretch" />
+                    </VisualState.Setters>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <controls:MusicControl x:Name="MusicControl" Height="330" VerticalAlignment="Top" />
 
-        <Grid x:Name="ContentGrid" Margin="55,250,55,30" CornerRadius="5" Background="{ThemeResource SystemChromeMediumColor}">
+        <Grid x:Name="ContentGrid" Margin="55,250,55,30" CornerRadius="5"
+              Background="{ThemeResource SystemChromeMediumColor}">
+            <StackPanel>
+                <Grid VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="500" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="Link" Grid.Column="0" Grid.Row="0"
+                             PlaceholderText="Insert Direct- or YouTube-Link to Song" Margin="10"
+                             HorizontalAlignment="Stretch" CornerRadius="2" />
+                    <Button x:Name="PlayLink" Grid.Column="1" Grid.Row="0" Content="Play" Margin="10"
+                            HorizontalAlignment="Left" CornerRadius="2" Click="PlayLink_OnClick" />
+                </Grid>
 
-            <Button Content="Open File" Margin="20" VerticalAlignment="Top" HorizontalAlignment="Left" CornerRadius="2"
-                    Click="OpenFile_OnClick" />
-
+                <Button x:Name="OpenFile" Content="Open File" Margin="10,20,10,10" VerticalAlignment="Top"
+                        HorizontalAlignment="Left" CornerRadius="2" Click="OpenFile_OnClick" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>
