@@ -9,7 +9,7 @@
   "theme_color": "#0D47A1",
   "description": "Ein leistungsstarker universeller Musik-Player für Online Radio und Offline / Online Musik",
   "orientation": "any",
-  "background_color": "pick",
+  "background_color": "#0D47A1",
   "related_applications": [],
   "prefer_related_applications": false,
   "icons": [

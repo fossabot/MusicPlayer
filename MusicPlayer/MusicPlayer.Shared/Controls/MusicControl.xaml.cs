@@ -17,14 +17,14 @@ namespace MusicPlayer.Shared.Controls
             InitializeComponent();
         }
 
+        public AudioEngine Engine { get; } = new AudioEngine();
+
         private void MusicControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.NewSize.Width < 800) VisualStateManager.GoToState(this, "Phone", false);
             else if (e.NewSize.Width < 1300) VisualStateManager.GoToState(this, "Tablet", false);
             else VisualStateManager.GoToState(this, "Desktop", false);
         }
-
-        public AudioEngine Engine { get; } = new AudioEngine();
 
         private void MusicControl_OnLoaded(object sender, RoutedEventArgs e)
         {

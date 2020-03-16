@@ -1,10 +1,10 @@
-h1 {
-    color: white;
-    text-align: center;
-    font-family: "Roboto", Sans-serif;
-    position: absolute;
+﻿h1 {
     bottom: 10%;
+    color: white;
+    font-family: "Roboto", Sans-serif;
     left: 50%;
+    position: absolute;
+    text-align: center;
     transform: translate(-50%, -50%);
 }
 
@@ -30,32 +30,30 @@ h1 {
     border-radius: 10px;
 }
 
-.uno-loader[loading-position='top'] progress {
-    color: var(--accent-color, #ffa726) !important;
-}
+.uno-loader[loading-position='top'] progress { color: var(--accent-color, #ffa726) !important; }
 
 .uno-loader[loading-alert] .alert {
-    color: var(--accent-color, #ffa726) !important;
     background: #0D47A1 !important;
+    color: var(--accent-color, #ffa726) !important;
 }
 
 .uno-loader .customLogo {
+    left: 50%;
     /* Center the logo */
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .uno-loader progress {
-    /* Dimensions */
-    width: 40% !important;
-    height: 15px !important;
-    /* Position */
-    bottom: 30% !important;
-    left: 30% !important;
-    right: 30% !important;
     background-color: white;
     border-radius: 13px;
+    /* Position */
+    bottom: 30% !important;
+    height: 15px !important;
+    left: 30% !important;
     padding: 3px;
+    right: 30% !important;
+    /* Dimensions */
+    width: 40% !important;
 }

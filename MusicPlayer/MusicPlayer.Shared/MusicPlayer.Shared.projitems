@@ -38,23 +38,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getDuration.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getFile.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getPosition.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\isPlaying.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PausePlay.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PlaySong.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Select.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setPosition.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setVolume.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Stop.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Views\" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-120.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-152.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\apple-icon-167.png" />
@@ -80,18 +63,30 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-750-1334.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\apple-splash-828-1792.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\favicon-196.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\lockscreenlogo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LockScreenLogo.scale-200.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\manifest-icon-192.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\manifest-icon-512.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\splashscreen.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\square150x150logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\square44x44logo.scale-200.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\square44x44logo.targetsize-24_altform-unplated.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\storelogo.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\wide310x150logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getDuration.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getFile.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getPosition.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\isPlaying.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PausePlay.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PlaySong.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Select.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setPosition.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setVolume.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Stop.js" />
   </ItemGroup>
 </Project>

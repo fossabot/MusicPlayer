@@ -41,22 +41,6 @@ call :FindReplace "%managedpath%" "managed" "%outputFolder%\uno-config.js"
 call :FindReplace "%managedpath%" "managed" "%outputFolder%\service-worker.js"
 
 echo.
-echo.^/-----------------------------------^\
-echo.^| Adding RH-Utensils Modded CSS ... ^|
-echo.^\-----------------------------------^/
-echo.
-
-xcopy "%projectFolder%\WasmCSS\RH-Utensils_Mod.css" "%outputFolder%\RH-Utensils_Mod.css*" /y
-
-echo.
-echo.^/-----------------------------------------------------------^\
-echo.^| ^Replace index.html with RH-Utensils Modded index.html ... ^|
-echo.^\-----------------------------------------------------------^/
-echo.
-
-xcopy "%projectFolder%\WasmHTML\RH-Utensils_Mod.html" "%outputFolder%\index.html*" /y
-
-echo.
 echo.^/--------------------^\
 echo.^| Fix wrong Logo ... ^|
 echo.^\--------------------^/
@@ -64,9 +48,9 @@ echo.^\--------------------^/
 call :FindReplace "https://nv-assets.azurewebsites.net/logos/uno.png" "./Assets/Logo.svg" "%outputFolder%\uno-bootstrap.js"
 
 echo.
-echo.^/--------------------------------------------^\
-echo.^| Project has been migrated successfully ... ^|
-echo.^\--------------------------------------------^/
+echo.^/------------------------------------------^\
+echo.^| Project has been copied successfully ... ^|
+echo.^\------------------------------------------^/
 echo.
 
 pause
