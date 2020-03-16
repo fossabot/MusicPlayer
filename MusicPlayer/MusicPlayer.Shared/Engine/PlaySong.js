@@ -8,33 +8,60 @@
     var url = URL.createObjectURL(input.files[0]);
 
     function PlayYouTube(youtube_url) {
-        $.get("https://youtube.api.hampoelz.net/video_info.php",
-            { url: youtube_url },
-            function(data) {
-                var first = data.find(function(link) {
-                    return link["format"].indexOf("webm, audio") !== -1;
-                });
 
-                var stream_url = "https://youtube.api.hampoelz.net/stream.php?url=" + encodeURIComponent(first["url"]);
+        var getJSON = function(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+              var status = xhr.status;
+              if (status === 200) {
+                callback(null, xhr.response);
+              } else {
+                callback(status, xhr.response);
+              }
+            };
+            xhr.send();
+        };
 
-                audio.src = stream_url;
+        getJSON('https://youtube.api.hampoelz.net/video_info.php?url=' + youtube_url,
+        function(err, data) {
+          if (err == null) {
+            var first = data.find(function (link) {
+                return link["format"].indexOf("webm, audio") !== -1;
             });
+
+            var stream_url = "https://youtube.api.hampoelz.net/stream.php?url=" + encodeURIComponent(first["url"]);
+
+            audio.src = stream_url;
+          }
+        });
+    }
+
+    function YouTubeValidator(youtube_url) {
+        var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        return (youtube_url.match(p));
+    }
+
+    function getYouTubeID(youtube_url) {
+        var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        return (youtube_url.match(p)) ? RegExp.$1 : false;
     }
 
     if (input.files[0] != null && input.files[0].name.endsWith(".radio")) {
         var fileReader = new FileReader();
 
-        fileReader.onload = function(e) {
-            if (fileReader.result.match(/watch\?v=([a-zA-Z0-9\-_]+)/)) {
-                PlayYouTube(fileReader.result);
+        fileReader.onload = function (e) {
+            if (YouTubeValidator(fileReader.result)) {
+                PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(fileReader.result));
             } else {
                 audio.src = fileReader.result;
             }
         };
 
         fileReader.readAsText(input.files[0]);
-    } else if (url.match(/watch\?v=([a-zA-Z0-9\-_]+)/)) {
-        PlayYouTube(url);
+    } else if (YouTubeValidator(url)) {
+        PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(url));
     } else {
         audio.src = url;
     }
@@ -72,7 +99,7 @@
 
     renderSize();
 
-    window.onresize = function(event) {
+    window.onresize = function (event) {
         renderSize();
     };
 
