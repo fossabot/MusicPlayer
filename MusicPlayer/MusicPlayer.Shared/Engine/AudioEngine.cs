@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -251,8 +250,6 @@ namespace MusicPlayer.Shared.Engine
             private set
             {
                 if (_isPlaying == value) return;
-
-                Debug.WriteLine(value);
 
                 _isPlaying = value;
                 OnPropertyChanged();
