@@ -71,18 +71,21 @@ namespace MusicPlayer.Shared.Controls
                 case "ChannelLength":
                     if (double.IsNaN(Engine.ChannelLength) || double.IsInfinity(Engine.ChannelLength))
                     {
+                        SongSeekBar.IsEnabled = false;
                         SongSeekBar.Maximum = 0;
                         SongDuration.Text = "00:00";
                     }
                     else
                     {
+                        SongSeekBar.IsEnabled = true;
                         SongSeekBar.Maximum = Engine.ChannelLength;
                         SongDuration.Text = TimeSpan.FromSeconds(Engine.ChannelLength).ToString(@"mm\:ss");
                     }
 
                     break;
                 case "ChannelPosition":
-                    SongSeekBar.Value = Engine.ChannelPosition;
+                    if (double.IsNaN(Engine.ChannelLength) || double.IsInfinity(Engine.ChannelLength)) SongSeekBar.Value = 0;
+                    else SongSeekBar.Value = Engine.ChannelPosition;
                     break;
                 case "Volume":
                     VolumeSeekBar.Value = Engine.Volume;
