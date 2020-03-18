@@ -5,65 +5,82 @@
 
     audio.crossOrigin = "anonymous";
 
-    var url = URL.createObjectURL(input.files[0]);
-
     function PlayYouTube(youtube_url) {
-
         var getJSON = function(url, callback) {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'json';
+            xhr.open("GET", url, true);
+            xhr.responseType = "json";
             xhr.onload = function() {
-              var status = xhr.status;
-              if (status === 200) {
-                callback(null, xhr.response);
-              } else {
-                callback(status, xhr.response);
-              }
+                var status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
             };
             xhr.send();
         };
 
-        getJSON('https://youtube.api.hampoelz.net/video_info.php?url=' + youtube_url,
-        function(err, data) {
-          if (err == null) {
-            var first = data.find(function (link) {
-                return link["format"].indexOf("webm, audio") !== -1;
+        getJSON("https://music.hampoelz.net/Engine/Parser/YouTube/public/video_info.php?url=" + youtube_url,
+            function(err, data) {
+                if (err == null) {
+                    var first = data.find(function(link) {
+                        return link["format"].indexOf("webm, audio") !== -1;
+                    });
+
+                    audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+                        encodeURIComponent(first["url"]);
+                }
             });
-
-            var stream_url = "https://youtube.api.hampoelz.net/stream.php?url=" + encodeURIComponent(first["url"]);
-
-            audio.src = stream_url;
-          }
-        });
     }
 
     function YouTubeValidator(youtube_url) {
-        var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        var p =
+            /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
         return (youtube_url.match(p));
     }
 
+    function UrlValidator(str) {
+        var p =
+            /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+        return (str.match(p));
+    }
+
     function getYouTubeID(youtube_url) {
-        var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        var p =
+            /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
         return (youtube_url.match(p)) ? RegExp.$1 : false;
     }
 
     if (input.files[0] != null && input.files[0].name.endsWith(".radio")) {
         var fileReader = new FileReader();
 
-        fileReader.onload = function (e) {
+        fileReader.onload = function(e) {
             if (YouTubeValidator(fileReader.result)) {
                 PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(fileReader.result));
+            } else if (UrlValidator(fileReader.result)) {
+                audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+                    encodeURIComponent(fileReader.result);
             } else {
                 audio.src = fileReader.result;
             }
         };
 
         fileReader.readAsText(input.files[0]);
-    } else if (YouTubeValidator(url)) {
-        PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(url));
+
+        input.value = "";
     } else {
-        audio.src = url;
+
+        var url = URL.createObjectURL(input.files[0]);
+
+        if (YouTubeValidator(url)) {
+            PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(url));
+        } else if (UrlValidator(url)) {
+            audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+                encodeURIComponent(url);
+        } else {
+            audio.src = url;
+        }
     }
 
     if (!window.audioContext) {
@@ -99,7 +116,7 @@
 
     renderSize();
 
-    window.onresize = function (event) {
+    window.onresize = function(event) {
         renderSize();
     };
 
@@ -172,7 +189,7 @@
         }
     }
 
-    //audio.play();
+    audio.play();
 
     renderFrame();
 }
