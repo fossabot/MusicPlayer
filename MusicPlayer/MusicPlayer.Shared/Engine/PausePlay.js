@@ -4,6 +4,10 @@
     if (audio.paused) {
         audio.play();
     } else {
+        if (audio.duration == Number.POSITIVE_INFINITY) {
+            audio.src = audio.src;
+        }
+
         audio.pause();
     }
 }
