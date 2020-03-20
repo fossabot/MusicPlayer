@@ -2,6 +2,8 @@
     var canvas = document.getElementById("canvas");
     var audio = document.getElementById("audio");
     var input = document.getElementById("select");
+    var title = document.getElementById("title");
+    title.innerHTML = "RH Music Player";
 
     audio.crossOrigin = "anonymous";
 
@@ -21,7 +23,7 @@
             xhr.send();
         };
 
-        getJSON("https://stream.hampoelz.net/video_info.php?url=" + youtube_url,
+        getJSON("https://stream.hampoelz.net/getLinks.php?url=" + youtube_url,
             function(err, data) {
                 if (err == null) {
                     var first = data.find(function(link) {
@@ -30,6 +32,13 @@
 
                     audio.src = "https://stream.hampoelz.net/stream.php?url=" +
                         encodeURIComponent(first["url"]);
+                }
+            });
+
+        getJSON("https://stream.hampoelz.net/getInfos.php?url=" + youtube_url,
+            function(err, data) {
+                if (err == null) {
+                    title.innerHTML = data["title"];
                 }
             });
     }
@@ -56,13 +65,13 @@
         var fileReader = new FileReader();
 
         fileReader.onload = function(e) {
+            if (input.files[0] != null) title.innerHTML = input.files[0].name;
+
             if (YouTubeValidator(fileReader.result)) {
                 PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(fileReader.result));
             } else if (UrlValidator(fileReader.result)) {
                 audio.src = "https://stream.hampoelz.net/stream.php?url=" +
                     encodeURIComponent(fileReader.result);
-            } else {
-                audio.src = fileReader.result;
             }
         };
 
@@ -72,6 +81,8 @@
     } else {
 
         var url = URL.createObjectURL(input.files[0]);
+
+        if (input.files[0] != null) title.innerHTML = input.files[0].name;
 
         if (YouTubeValidator(url)) {
             PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(url));

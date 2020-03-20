@@ -28,9 +28,9 @@ namespace MusicPlayer.Shared.Engine
 
             #endregion
 
-            #region GetFileName
+            #region GetFilePath
 
-            string GetFileNameMethod()
+            string GetFilePathMethod()
             {
                 var stream = File.GetStreamFromResource(@"getFile.js", GetType());
                 var reader = new StreamReader(stream);
@@ -39,7 +39,22 @@ namespace MusicPlayer.Shared.Engine
                 return InvokeJs(function);
             }
 
-            FileName = GetFileNameMethod();
+            FilePath = GetFilePathMethod();
+
+            #endregion
+
+            #region GetTitle
+
+            string GetTitleMethod()
+            {
+                var stream = File.GetStreamFromResource(@"getTitle.js", GetType());
+                var reader = new StreamReader(stream);
+                var function = reader.ReadToEnd();
+
+                return InvokeJs(function);
+            }
+
+            Title = GetTitleMethod();
 
             #endregion
 
@@ -121,6 +136,7 @@ namespace MusicPlayer.Shared.Engine
                 ? reader.ReadToEnd()
                 : reader.ReadToEnd().Replace("URL.createObjectURL(input.files[0])", "\'" + link + "\'");
 
+            if (link != null) FilePath = "";
             InvokeJs(function);
         }
 
@@ -239,7 +255,8 @@ namespace MusicPlayer.Shared.Engine
         private bool _isMuted;
         private bool _isShuffle;
         private bool _isRepeatAll;
-        private string _fileName = "";
+        private string _filePath = "";
+        private string _title = "";
         private double _channelLength;
         private double _channelPosition;
         private double _volume = 100;
@@ -292,16 +309,29 @@ namespace MusicPlayer.Shared.Engine
             }
         }
 
-        public string FileName
+        public string FilePath
         {
-            get => _fileName;
+            get => _filePath;
             private set
             {
-                if (_fileName == value || string.IsNullOrEmpty(value) ||
-                    string.Equals(_fileName, value, StringComparison.CurrentCultureIgnoreCase)) return;
+                if (_filePath == value ||
+                    string.Equals(_filePath, value, StringComparison.CurrentCultureIgnoreCase)) return;
 
-                _fileName = value;
-                Play();
+                _filePath = value;
+                if (!string.IsNullOrEmpty(value)) Play();
+                OnPropertyChanged();
+            }
+        }
+
+        public string Title
+        {
+            get => _title;
+            private set
+            {
+                if (_title == value || string.IsNullOrEmpty(value) ||
+                    string.Equals(_title, value, StringComparison.CurrentCultureIgnoreCase)) return;
+
+                _title = value;
                 OnPropertyChanged();
             }
         }
@@ -351,7 +381,7 @@ namespace MusicPlayer.Shared.Engine
         public void Load(UIElement element)
         {
             const string html =
-                "<canvas id=\"canvas\" style=\"position: fixed; left: 0; top: 0; width: 100%; height: 100%;\"><audio id=\"audio\" preload=\"none\" style=\"visibility:hidden;\" controls autoplay></audio><input id=\"select\" type=\"file\" accept=\"audio/*,.radio\"></canvas>";
+                "<canvas id=\"canvas\" style=\"position: fixed; left: 0; top: 0; width: 100%; height: 100%;\"><audio id=\"audio\" preload=\"none\" style=\"visibility:hidden;\" controls autoplay></audio><input id=\"select\" type=\"file\" accept=\"audio/*,.radio\"><p id=\"title\" style=\"visibility:hidden;\">RH Music Player</p></canvas>";
 
             WebAssemblyRuntime.InvokeJS("document.getElementById('" + element.HtmlId + "').innerHTML = '" + html +
                                         "';");

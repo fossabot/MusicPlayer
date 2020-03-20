@@ -1,11 +1,11 @@
 ﻿function Main() {
     var input = document.getElementById("select");
 
-    if (input.files[0] == null) {
+    if (input.value == null || input.value == "") {
         return null;
     }
 
-    return input.files[0].name;
+    return input.value.toString();
 }
 
 Main();

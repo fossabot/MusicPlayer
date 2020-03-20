@@ -65,8 +65,8 @@ namespace MusicPlayer.Shared.Controls
                         ? new SolidColorBrush(Colors.White)
                         : new SolidColorBrush(Colors.Transparent);
                     break;
-                case "FileName":
-                    SongTitle.Text = Path.GetFileNameWithoutExtension(Engine.FileName);
+                case "Title":
+                    SongTitle.Text = Path.GetFileNameWithoutExtension(Engine.Title);
                     break;
                 case "ChannelLength":
                     if (double.IsNaN(Engine.ChannelLength) || double.IsInfinity(Engine.ChannelLength))
@@ -84,8 +84,7 @@ namespace MusicPlayer.Shared.Controls
 
                     break;
                 case "ChannelPosition":
-                    if (double.IsNaN(Engine.ChannelLength) || double.IsInfinity(Engine.ChannelLength)) SongSeekBar.Value = 0;
-                    else SongSeekBar.Value = Engine.ChannelPosition;
+                    SongSeekBar.Value = Engine.ChannelPosition;
                     break;
                 case "Volume":
                     VolumeSeekBar.Value = Engine.Volume;
