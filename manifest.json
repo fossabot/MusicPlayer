@@ -2,9 +2,9 @@
   "dir": "ltr",
   "lang": "German",
   "name": "RH Music Player",
-  "scope": "./",
+  "scope": "/",
   "display": "standalone",
-  "start_url": "./index.html",
+  "start_url": "https://music.hampoelz.net/",
   "short_name": "RH Music",
   "theme_color": "#0D47A1",
   "description": "Ein leistungsstarker universeller Musik-Player für Online Radio und Offline / Online Musik",
@@ -24,7 +24,7 @@
       "type": "image/png"
     }
   ],
-  "url": "https://rh-utensils.github.io/MusicPlayer/",
+  "url": "https://music.hampoelz.net/",
   "screenshots": [],
   "generated": "true"
 }
