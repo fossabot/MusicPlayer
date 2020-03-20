@@ -21,14 +21,14 @@
             xhr.send();
         };
 
-        getJSON("https://music.hampoelz.net/Engine/Parser/YouTube/public/video_info.php?url=" + youtube_url,
+        getJSON("https://stream.hampoelz.net/video_info.php?url=" + youtube_url,
             function(err, data) {
                 if (err == null) {
                     var first = data.find(function(link) {
                         return link["format"].indexOf("webm, audio") !== -1;
                     });
 
-                    audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+                    audio.src = "https://stream.hampoelz.net/stream.php?url=" +
                         encodeURIComponent(first["url"]);
                 }
             });
@@ -59,7 +59,7 @@
             if (YouTubeValidator(fileReader.result)) {
                 PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(fileReader.result));
             } else if (UrlValidator(fileReader.result)) {
-                audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+                audio.src = "https://stream.hampoelz.net/stream.php?url=" +
                     encodeURIComponent(fileReader.result);
             } else {
                 audio.src = fileReader.result;
@@ -76,7 +76,7 @@
         if (YouTubeValidator(url)) {
             PlayYouTube("https://www.youtube.com/watch?v=" + getYouTubeID(url));
         } else if (UrlValidator(url)) {
-            audio.src = "https://music.hampoelz.net/Engine/Parser/YouTube/public/stream.php?url=" +
+            audio.src = "https://stream.hampoelz.net/stream.php?url=" +
                 encodeURIComponent(url);
         } else {
             audio.src = url;
