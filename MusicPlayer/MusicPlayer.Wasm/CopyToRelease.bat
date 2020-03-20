@@ -9,7 +9,7 @@ echo.^\----------------------------^/
 echo.
 
 echo Read config File ...
-for /f "tokens=*" %%a in (%projectFolder%\bin\Release\netstandard2.0\dist\uno-config.js) do (
+for /f "tokens=*" %%a in (%projectFolder%\bin\Debug\netstandard2.0\dist\uno-config.js) do (
     echo.%%a | findstr /C:"uno_remote_managedpath">nul && (
         echo Found managedpath parameter
         for /f "tokens=1-2 delims=()= " %%A in ("%%a") do (
@@ -28,9 +28,9 @@ echo.^| ^Copy all files to Production ... ^|
 echo.^\----------------------------------^/
 echo.
 
-dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "managed-" >"%temp%\managed-files.tmp"
-xcopy "%projectFolder%\bin\Release\netstandard2.0\dist" "%outputFolder%\" /exclude:%temp%\managed-files.tmp /y /s
-xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\%managedpath%" "%outputFolder%\managed\" /y /s
+dir /b /a:d "%projectFolder%\bin\Debug\netstandard2.0\dist"|findstr /b "managed-" >"%temp%\managed-files.tmp"
+xcopy "%projectFolder%\bin\Debug\netstandard2.0\dist" "%outputFolder%\" /exclude:%temp%\managed-files.tmp /y /s
+xcopy "%projectFolder%\bin\Debug\netstandard2.0\dist\%managedpath%" "%outputFolder%\managed\" /y /s
 
 echo.
 echo.^/-------------------------------^\
