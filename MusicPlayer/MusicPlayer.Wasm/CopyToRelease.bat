@@ -29,7 +29,6 @@ echo.^\----------------------------------^/
 echo.
 
 dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "managed-" >"%temp%\managed-files.tmp"
-dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "_compressed_" >>"%temp%\managed-files.tmp"
 xcopy "%projectFolder%\bin\Release\netstandard2.0\dist" "%outputFolder%\" /exclude:%temp%\managed-files.tmp /y /s
 xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\%managedpath%" "%outputFolder%\managed\" /y /s
 
