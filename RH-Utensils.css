@@ -57,9 +57,3 @@
     /* Dimensions */
     width: 40% !important;
 }
-
-/* It only applies to the title bar */
-.titlebar, .titlebar > * {
-    font-family: Roboto, sans-serif;
-    font-size: 20px;
-}
