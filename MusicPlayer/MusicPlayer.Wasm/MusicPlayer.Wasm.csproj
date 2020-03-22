@@ -16,7 +16,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CNAME" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include=".htaccess" />
+    <Content Include="CNAME" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WasmCSS\RH-Utensils.css" />
