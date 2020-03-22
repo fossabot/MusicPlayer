@@ -28,18 +28,32 @@ echo.^| ^Copy all files to Production ... ^|
 echo.^\----------------------------------^/
 echo.
 
-dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "managed-" >"%temp%\managed-files.tmp"
-dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "_compressed_" >>"%temp%\managed-files.tmp"
-xcopy "%projectFolder%\bin\Release\netstandard2.0\dist" "%outputFolder%\" /exclude:%temp%\managed-files.tmp /y /s
-xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\%managedpath%" "%outputFolder%\managed\" /y /s
+dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "managed-" >"%temp%\exclude.tmp"
+dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist"|findstr /b "_compressed_" >>"%temp%\exclude.tmp"
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist" "%outputFolder%\" /exclude:%temp%\exclude.tmp /y /s
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\%managedpath%" "%outputFolder%\%managedpath%\" /y /s
 
-echo.
-echo.^/-------------------------------^\
-echo.^| ^Replace managedpath value ... ^|
-echo.^\-------------------------------^/
+dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_br"|findstr /b "managed-" >"%temp%\exclude.tmp"
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_br" "%outputFolder%\_compressed_br\" /exclude:%temp%\exclude.tmp /y /s
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_br\%managedpath%" "%outputFolder%\_compressed_br\%managedpath%\" /y /s
 
-call :FindReplace "%managedpath%" "managed" "%outputFolder%\uno-config.js"
-call :FindReplace "%managedpath%" "managed" "%outputFolder%\service-worker.js"
+dir /b /a:d "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_gz"|findstr /b "managed-" >"%temp%\exclude.tmp"
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_gz" "%outputFolder%\_compressed_gz\" /exclude:%temp%\exclude.tmp /y /s
+xcopy "%projectFolder%\bin\Release\netstandard2.0\dist\_compressed_gz\%managedpath%" "%outputFolder%\_compressed_gz\%managedpath%\" /y /s
+
+:: echo.
+:: echo.^/-------------------------------^\
+:: echo.^| ^Replace managedpath value ... ^|
+:: echo.^\-------------------------------^/
+:: 
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\uno-config.js"
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\service-worker.js"
+:: 
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\_compressed_br\uno-config.js"
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\_compressed_br\service-worker.js"
+:: 
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\_compressed_gz\uno-config.js"
+:: call :FindReplace "%managedpath%" "managed" "%outputFolder%\_compressed_gz\service-worker.js"
 
 echo.
 echo.^/--------------------^\
