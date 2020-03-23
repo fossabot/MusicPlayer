@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:MusicPlayer.Shared.Controls"
-    mc:Ignorable="d" SizeChanged="MainPage_OnSizeChanged">
+    mc:Ignorable="d" SizeChanged="MainPage_OnSizeChanged" Loaded="MainPage_OnLoaded">
 
     <Grid Background="{ThemeResource SystemChromeLowColor}">
         <VisualStateManager.VisualStateGroups>
@@ -38,7 +38,43 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+
         <controls:MusicControl x:Name="MusicControl" Height="330" VerticalAlignment="Top" />
+
+        <Grid x:Name="TitleBar" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="30"
+              Visibility="Collapsed">
+            <Border x:Name="WindowDragRegion" Margin="0,0,125,0" />
+            <Border VerticalAlignment="Center" HorizontalAlignment="Left" Margin="30,6,0,0">
+                <Viewbox Width="25" Height="25">
+                    <Canvas Width="30" Height="30">
+                        <Path Fill="White"
+                              Data="M12 3V13.55C11.41 13.21 10.73 13 10 13C7.79 13 6 14.79 6 17S7.79 21 10 21 14 19.21 14 17V7H18V3H12Z" />
+                    </Canvas>
+                </Viewbox>
+            </Border>
+            <TextBlock Text="RH Music" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="55,0,0,0" />
+
+            <Border x:Name="WindowMinimizeButton" Background="#2E7D32" CornerRadius="7" Width="15" Height="15"
+                    VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,80,0"
+                    PointerEntered="WindowButtons_OnPointerEntered" PointerExited="WindowButtons_OnPointerExited"
+                    PointerPressed="WindowButtons_OnPointerPressed" PointerReleased="WindowButtons_OnPointerEntered">
+                <Border />
+            </Border>
+            <Border x:Name="WindowMinMaxButton" Background="#D84315" CornerRadius="7" Width="15" Height="15"
+                    VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,55,0"
+                    PointerEntered="WindowButtons_OnPointerEntered" PointerExited="WindowButtons_OnPointerExited"
+                    PointerPressed="WindowButtons_OnPointerPressed" PointerReleased="WindowButtons_OnPointerEntered">
+                <Border />
+            </Border>
+            <Border x:Name="WindowCloseButton" Background="#C62828" CornerRadius="7" Width="15" Height="15"
+                    VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,30,0"
+                    PointerEntered="WindowButtons_OnPointerEntered" PointerExited="WindowButtons_OnPointerExited"
+                    PointerPressed="WindowButtons_OnPointerPressed" PointerReleased="WindowButtons_OnPointerEntered">
+                <Border />
+            </Border>
+
+            <Rectangle Height="1" VerticalAlignment="Bottom" Margin="20,0,20,0" Fill="White" Opacity="0.05" />
+        </Grid>
 
         <Grid x:Name="ContentGrid" Margin="55,250,55,30" CornerRadius="5"
               Background="{ThemeResource SystemChromeMediumColor}">
