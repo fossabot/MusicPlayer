@@ -1,7 +1,5 @@
 ﻿function Main() {
-    var audio = document.getElementById("audio");
-
-    audio.volume = $Volume;
+    document.getElementById("audio").volume = $Volume;
 }
 
 Main();

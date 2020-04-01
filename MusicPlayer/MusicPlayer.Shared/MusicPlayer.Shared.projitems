@@ -81,17 +81,20 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getDuration.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getPosition.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\isPlaying.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PausePlay.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\PlaySong.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Select.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\_SongPausePlay.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\_SongPlay.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\_FileSelector.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setPosition.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setVolume.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\Stop.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getFile.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getFiles.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getTitle.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getWebmUrl.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\_SongStop.js" />
   </ItemGroup>
 </Project>
