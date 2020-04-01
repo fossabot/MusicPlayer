@@ -1,15 +1,17 @@
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url(./fonts/Roboto.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Roboto'), local('Roboto-Regular'), url(./fonts/Roboto.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
+
 html, body {
     height: 100%;
     font-family: "Roboto", Sans-serif;
     color: white;
 }
+
 body {
     margin: 0;
     background-color: #0D47A1;
@@ -53,8 +55,8 @@ p.refresh {
     -webkit-app-region: drag;
     position: absolute;
     width: -webkit-calc(100% - 125px);
-    width:    -moz-calc(100% - 125px);
-    width:         calc(100% - 125px);
+    width: -moz-calc(100% - 125px);
+    width: calc(100% - 125px);
     height: 30px;
 }
 
@@ -87,8 +89,8 @@ p.refresh {
     position: absolute;
     top: 7.5px;
     left: -webkit-calc(100% - 70px);
-    left:    -moz-calc(100% - 70px);
-    left:         calc(100% - 70px);
+    left: -moz-calc(100% - 70px);
+    left: calc(100% - 70px);
     width: 15px;
     height: 15px;
     clip: rect(0px, 15px, 15px, 0px);
@@ -100,8 +102,8 @@ p.refresh {
     position: absolute;
     top: 7.5px;
     left: -webkit-calc(100% - 45px);
-    left:    -moz-calc(100% - 45px);
-    left:         calc(100% - 45px);
+    left: -moz-calc(100% - 45px);
+    left: calc(100% - 45px);
     width: 15px;
     height: 15px;
     clip: rect(0px, 15px, 15px, 0px);
