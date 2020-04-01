@@ -1,7 +1,7 @@
 {
   "name": "musicapp",
   "productName": "RH Music App",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "Electron Desktop App Wrapper for the RH Music PWA",
   "homepage": "https://music.hampoelz.net/",
   "main": "index.js",
