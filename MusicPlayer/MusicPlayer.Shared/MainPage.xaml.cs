@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -6,30 +7,35 @@ using Uno.Foundation;
 
 namespace MusicPlayer
 {
-    public sealed partial class MainPage : Page
+    public partial class MainPage : Page
     {
+        public static readonly string UserAgentPostfix = "[RH Music PWA Wrapper]";
+
         public MainPage()
         {
             InitializeComponent();
         }
 
+        public static bool isPwaWrapper { get; private set; }
+        public static string UserAgent { get; private set; }
+
         private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var userAgent = WebAssemblyRuntime.InvokeJS("navigator.userAgent;");
+            UserAgent = WebAssemblyRuntime.InvokeJS("navigator.userAgent;");
+            isPwaWrapper = UserAgent.Contains(UserAgentPostfix);
 
-            if (userAgent.Contains("WindowsDesktop") || userAgent.Contains("MacOSXDesktop") ||
-                userAgent.Contains("LinuxDesktop"))
-            {
-                TitleBar.Visibility = Visibility.Visible;
-                WebAssemblyRuntime.InvokeJS("document.getElementById('" + WindowDragRegion.HtmlId +
-                                            "').style = '-webkit-app-region: drag';");
-                WebAssemblyRuntime.InvokeJS("document.getElementById('" + WindowMinimizeButton.HtmlId +
-                                            "').addEventListener('click', () => window.ipcRenderer.send('app:minimize'));");
-                WebAssemblyRuntime.InvokeJS("document.getElementById('" + WindowMinMaxButton.HtmlId +
-                                            "').addEventListener('click', () => window.ipcRenderer.send('app:min-max'));");
-                WebAssemblyRuntime.InvokeJS("document.getElementById('" + WindowCloseButton.HtmlId +
-                                            "').addEventListener('click', () => window.ipcRenderer.send('app:quit'));");
-            }
+
+            if (!isPwaWrapper) return;
+
+            TitleBar.Visibility = Visibility.Visible;
+            WebAssemblyRuntime.InvokeJS($"document.getElementById('{WindowDragRegion.HtmlId}')" +
+                                        ".style = '-webkit-app-region: drag';");
+            WebAssemblyRuntime.InvokeJS($"document.getElementById('{WindowMinimizeButton.HtmlId}')" +
+                                        ".addEventListener('click', () => window.ipcRenderer.send('app:minimize'));");
+            WebAssemblyRuntime.InvokeJS($"document.getElementById('{WindowMinMaxButton.HtmlId}')" +
+                                        ".addEventListener('click', () => window.ipcRenderer.send('app:min-max'));");
+            WebAssemblyRuntime.InvokeJS($"document.getElementById('{WindowCloseButton.HtmlId}')" +
+                                        ".addEventListener('click', () => window.ipcRenderer.send('app:quit'));");
         }
 
         private void MainPage_OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -39,14 +45,58 @@ namespace MusicPlayer
             else VisualStateManager.GoToState(this, "Desktop", false);
         }
 
-        private void OpenFile_OnClick(object sender, RoutedEventArgs e)
+        private async void Play_OnClick(object sender, RoutedEventArgs e)
         {
-            MusicControl.Engine.Select();
+            MusicControl.Engine.AddSongs = false;
+
+            if (Uri.TryCreate(Url.Text, UriKind.Absolute, out var uriResult))
+            {
+                var song = await MusicControl.Engine.CreateSongAsync(uriResult.ToString());
+
+                await MusicControl.Engine.Play(song);
+
+                Url.Text = "";
+            }
+            else
+            {
+                MusicControl.Engine.OpenFileDialog();
+            }
         }
 
-        private void PlayLink_OnClick(object sender, RoutedEventArgs e)
+        private async void AddToPlaylist_OnClick(object sender, RoutedEventArgs e)
         {
-            MusicControl.Engine.Play(Link.Text);
+            MusicControl.Engine.AddSongs = true;
+
+            if (Uri.TryCreate(Url.Text, UriKind.Absolute, out var uriResult))
+            {
+                var song = await MusicControl.Engine.CreateSongAsync(uriResult.ToString());
+
+                var playlist = MusicControl.Engine.Playlist;
+                playlist.Add(song);
+                MusicControl.Engine.Playlist = playlist;
+
+                if (MusicControl.Engine.CurrentPlayBack == null) await MusicControl.Engine.Play(song);
+
+                Url.Text = "";
+            }
+            else
+            {
+                MusicControl.Engine.OpenFileDialog();
+            }
+        }
+
+        private void ClearPlaylist_OnClick(object sender, RoutedEventArgs e)
+        {
+            var playlist = MusicControl.Engine.Playlist;
+            playlist.Clear();
+            MusicControl.Engine.Playlist = playlist;
+        }
+
+        private async void StartPlaylist_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (MusicControl.Engine.Playlist.Count < 1) return;
+
+            await MusicControl.Engine.Play(MusicControl.Engine.Playlist[0]);
         }
 
         private void WindowButtons_OnPointerEntered(object sender, PointerRoutedEventArgs e)

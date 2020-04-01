@@ -25,15 +25,21 @@
                         <Setter Target="ContentGrid.Margin" Value="0,240,0,0" />
                         <Setter Target="ContentGrid.CornerRadius" Value="0" />
 
-                        <Setter Target="Link.(Grid.ColumnSpan)" Value="2" />
-                        <Setter Target="Link.MinWidth" Value="0" />
-                        <Setter Target="Link.MaxWidth" Value="780" />
-                        <Setter Target="PlayLink.(Grid.Column)" Value="0" />
-                        <Setter Target="PlayLink.(Grid.ColumnSpan)" Value="2" />
-                        <Setter Target="PlayLink.(Grid.Row)" Value="1" />
-                        <Setter Target="PlayLink.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="Play.(Grid.Column)" Value="0" />
+                        <Setter Target="Play.(Grid.Row)" Value="0" />
+                        <Setter Target="Play.(Grid.ColumnSpan)" Value="2" />
 
-                        <Setter Target="OpenFile.HorizontalAlignment" Value="Stretch" />
+                        <Setter Target="AddToPlaylist.(Grid.Column)" Value="2" />
+                        <Setter Target="AddToPlaylist.(Grid.Row)" Value="0" />
+                        <Setter Target="AddToPlaylist.(Grid.ColumnSpan)" Value="2" />
+
+                        <Setter Target="ClearPlaylist.(Grid.Column)" Value="0" />
+                        <Setter Target="ClearPlaylist.(Grid.Row)" Value="1" />
+                        <Setter Target="ClearPlaylist.(Grid.ColumnSpan)" Value="2" />
+
+                        <Setter Target="StartPlaylist.(Grid.Column)" Value="2" />
+                        <Setter Target="StartPlaylist.(Grid.Row)" Value="1" />
+                        <Setter Target="StartPlaylist.(Grid.ColumnSpan)" Value="2" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -78,25 +84,34 @@
 
         <Grid x:Name="ContentGrid" Margin="55,250,55,30" CornerRadius="5"
               Background="{ThemeResource SystemChromeMediumColor}">
+
             <StackPanel>
-                <Grid VerticalAlignment="Top">
+                <TextBox x:Name="Url"
+                         PlaceholderText="Insert Direct- or YouTube-Url to Song"
+                         Margin="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" CornerRadius="2" />
+
+                <Grid Margin="10,0" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="Link" Grid.Column="0" Grid.Row="0" MinWidth="660" MaxWidth="660"
-                             PlaceholderText="Insert Direct- or YouTube-Link to Song" Margin="10"
-                             HorizontalAlignment="Stretch" CornerRadius="2" />
-                    <Button x:Name="PlayLink" Grid.Column="1" Grid.Row="0" Content="Play" Margin="10" MinWidth="100"
-                            HorizontalAlignment="Left" CornerRadius="2" Click="PlayLink_OnClick" />
-                </Grid>
 
-                <Button x:Name="OpenFile" Content="Open File" Margin="10,20,10,10" VerticalAlignment="Top"
-                        HorizontalAlignment="Left" CornerRadius="2" Click="OpenFile_OnClick" />
+                    <Button x:Name="Play" Margin="10,5" Content="Play Song/Url" Grid.Column="0"
+                            HorizontalAlignment="Stretch" CornerRadius="2" Click="Play_OnClick" />
+                    <Button x:Name="AddToPlaylist" Margin="10,5" Content="Add Song/Url to Playlist" Grid.Column="1"
+                            HorizontalAlignment="Stretch" CornerRadius="2" Click="AddToPlaylist_OnClick" />
+                    <Button x:Name="ClearPlaylist" Margin="10,5" Content="Clear Playlist" Grid.Column="2"
+                            HorizontalAlignment="Stretch" CornerRadius="2" Click="ClearPlaylist_OnClick" />
+                    <Button x:Name="StartPlaylist" Margin="10,5" Content="Start Playlist" Grid.Column="3"
+                            HorizontalAlignment="Stretch" CornerRadius="2" Click="StartPlaylist_OnClick" />
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>
