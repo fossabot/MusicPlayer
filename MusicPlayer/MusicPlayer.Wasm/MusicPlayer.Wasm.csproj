@@ -47,11 +47,10 @@
     <!-- Note that for WebAssembly version 1.1.1 of the console logger required -->
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Uno.UI" Version="2.2.0-dev.204" />
-    <PackageReference Include="Uno.UI.RemoteControl" Version="2.2.0-dev.204" Condition="'$(Configuration)'=='Debug'" />
-    <PackageReference Include="Uno.Wasm.Bootstrap" Version="1.1.0-dev.433" />
-    <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.1.0-dev.433" />
+    <PackageReference Include="Uno.UI" Version="2.2.0-dev.294" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="2.2.0-dev.294" Condition="'$(Configuration)'=='Debug'" />
+    <PackageReference Include="Uno.Wasm.Bootstrap" Version="1.1.0-dev.445" />
+    <DotNetCliToolReference Include="Uno.Wasm.Bootstrap.Cli" Version="1.1.0-dev.445" />
   </ItemGroup>
   <Import Project="..\MusicPlayer.Shared\MusicPlayer.Shared.projitems" Label="Shared" Condition="Exists('..\MusicPlayer.Shared\MusicPlayer.Shared.projitems')" />
 </Project>
