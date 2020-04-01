@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -37,51 +36,40 @@ namespace MusicPlayer.Shared.Controls
         {
             switch (e.PropertyName)
             {
+                case "CurrentPlayBack":
+                    SongTitle.Text = Engine.CurrentPlayBack == null
+                        ? "RH Music Player"
+                        : Engine.CurrentPlayBack.Title;
+                    break;
                 case "IsPlaying":
-                    if (Engine.IsPlaying)
-                    {
-                        PlaySymbol.Visibility = Visibility.Collapsed;
-                        PauseSymbol.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        PlaySymbol.Visibility = Visibility.Visible;
-                        PauseSymbol.Visibility = Visibility.Collapsed;
-                    }
-
+                    PlaySymbol.Visibility = Engine.IsPlaying ? Visibility.Collapsed : Visibility.Visible;
+                    PauseSymbol.Visibility = Engine.IsPlaying ? Visibility.Visible : Visibility.Collapsed;
                     break;
                 case "IsMuted":
                     MuteToggleButton.BorderBrush = Engine.IsMuted
                         ? new SolidColorBrush(Colors.White)
                         : new SolidColorBrush(Colors.Transparent);
                     break;
-                case "IsShuffle":
-                    ShuffleToggleButton.BorderBrush = Engine.IsShuffle
+                case "Shuffle":
+                    ShuffleToggleButton.BorderBrush = Engine.Shuffle
                         ? new SolidColorBrush(Colors.White)
                         : new SolidColorBrush(Colors.Transparent);
                     break;
-                case "IsRepeatAll":
-                    RepeatAllToggleButton.BorderBrush = Engine.IsRepeatAll
+                case "RepeatAll":
+                    RepeatAllToggleButton.BorderBrush = Engine.RepeatAll
                         ? new SolidColorBrush(Colors.White)
                         : new SolidColorBrush(Colors.Transparent);
                     break;
-                case "Title":
-                    SongTitle.Text = Path.GetFileNameWithoutExtension(Engine.Title);
-                    break;
-                case "ChannelLength":
-                    if (double.IsNaN(Engine.ChannelLength) || double.IsInfinity(Engine.ChannelLength))
-                    {
-                        SongSeekBar.IsEnabled = false;
-                        SongSeekBar.Maximum = 0;
-                        SongDuration.Text = "00:00";
-                    }
-                    else
-                    {
-                        SongSeekBar.IsEnabled = true;
-                        SongSeekBar.Maximum = Engine.ChannelLength;
-                        SongDuration.Text = TimeSpan.FromSeconds(Engine.ChannelLength).ToString(@"mm\:ss");
-                    }
+                case "CurrentChannelLength":
+                    var isEnabled = Engine.CurrentPlayBack != null &&
+                                    Engine.CurrentPlayBack.Provider != AudioEngine.SongProvider.LiveStream &&
+                                    !double.IsNaN(Engine.CurrentChannelLength);
 
+                    SongSeekBar.IsEnabled = isEnabled;
+                    SongSeekBar.Maximum = isEnabled ? Engine.CurrentChannelLength : 0;
+                    SongDuration.Text = isEnabled
+                        ? TimeSpan.FromSeconds(Engine.CurrentChannelLength).ToString(@"mm\:ss")
+                        : "00:00";
                     break;
                 case "ChannelPosition":
                     SongSeekBar.Value = Engine.ChannelPosition;
@@ -102,32 +90,43 @@ namespace MusicPlayer.Shared.Controls
 
             if (span < 500) return;
 
-            Engine.SetPosition(e.NewValue);
+            Engine.ChannelPosition = e.NewValue;
         }
 
         private void Shuffle_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.Shuffle();
+            Engine.Shuffle = !Engine.Shuffle;
         }
 
-        private void Previous_OnClick(object sender, RoutedEventArgs e)
+        private async void Previous_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.PlayPrevious();
+            await Engine.PlayPrevious();
         }
 
-        private void PausePlay_OnClick(object sender, RoutedEventArgs e)
+        private async void PausePlay_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.PausePlay();
+            switch (Engine.CurrentPlayBack)
+            {
+                case null when Engine.Playlist.Count == 0:
+                    Engine.OpenFileDialog();
+                    break;
+                case null:
+                    await Engine.Play(Engine.Playlist[0]);
+                    break;
+                default:
+                    Engine.PausePlay();
+                    break;
+            }
         }
 
-        private void Next_OnClick(object sender, RoutedEventArgs e)
+        private async void Next_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.PlayNext();
+            await Engine.PlayNext();
         }
 
         private void RepeatAll_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.RepeatAll();
+            Engine.RepeatAll = !Engine.RepeatAll;
         }
 
         // TODO: Pin song function
@@ -167,12 +166,12 @@ namespace MusicPlayer.Shared.Controls
                 VolumeSeekBarMute.Visibility = Visibility.Visible;
             }
 
-            Engine.SetVolume(e.NewValue);
+            Engine.Volume = e.NewValue;
         }
 
         private void Mute_OnClick(object sender, RoutedEventArgs e)
         {
-            Engine.Mute();
+            Engine.IsMuted = !Engine.IsMuted;
         }
     }
 }
