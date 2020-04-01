@@ -2,11 +2,10 @@ const Constants = {
   settings: {
     appName: 'RH Music',
     appUrl: 'https://music.hampoelz.net', // without trailing slash!
+    //appUrl: 'http://localhost:5555', // for testing
     enableDevMenu: false, // enable for dev-builds only!
     themeColor: '#0D47A1',
-    userAgentPostfixWindows: 'WindowsDesktop',
-    userAgentPostfixOSX: 'MacOSXDesktop',
-    userAgentPostfixLinux: 'LinuxDesktop'
+    userAgentPostfix: '[RH Music PWA Wrapper]'
   },
   mainWindow: {
     minwidth: 400,

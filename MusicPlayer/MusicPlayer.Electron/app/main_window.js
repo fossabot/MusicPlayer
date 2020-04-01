@@ -1,7 +1,6 @@
 const path = require('path');
 const electron = require('electron');
-const { BrowserWindow , shell, session } = electron;
-const os = require('./operating_system');
+const { BrowserWindow, shell, session } = electron;
 const c = require('./constants');
 
 class MainWindow extends BrowserWindow {
@@ -20,7 +19,7 @@ class MainWindow extends BrowserWindow {
       webPreferences: {
         nodeIntegration: false,
         preload: path.resolve(__dirname, '../src', 'ipcPreloader.js'),
-      }, 
+      },
     };
 
     // initalize BrowserWindow
@@ -29,7 +28,7 @@ class MainWindow extends BrowserWindow {
 
     //  -- Event listeners: --
     // Open new windows in default Browser
-    this.webContents.on('new-window', function(e, url) {
+    this.webContents.on('new-window', function (e, url) {
       e.preventDefault();
       shell.openExternal(url);
     });
@@ -41,13 +40,9 @@ class MainWindow extends BrowserWindow {
 
   // add custom user agent postifx (e.g. for google analytics)
   loadCustomUrl(url) {
-    var userAgentPostfix = c.settings.userAgentPostfixOSX;
-    if (os.isWindows()) userAgentPostfix = c.settings.userAgentPostfixWindows;
-    else if (os.isLinux()) userAgentPostfix = c.settings.userAgentPostfixLinux;
-
     this.loadURL(url, {
       userAgent: (session.defaultSession.getUserAgent()
-        + ' ' + userAgentPostfix),
+        + ' ' + c.settings.userAgentPostfix),
     });
   }
 
