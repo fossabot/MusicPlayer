@@ -1,8 +1,8 @@
 {
-  "name": "musicplayerapp",
-  "productName": "RH MusicPlayer App",
+  "name": "musicapp",
+  "productName": "RH Music App",
   "version": "1.0.0",
-  "description": "Electron Desktop App Wrapper for the RH Music Player PWA",
+  "description": "Electron Desktop App Wrapper for the RH Music PWA",
   "homepage": "https://music.hampoelz.net/",
   "main": "index.js",
   "author": {
@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "electron": "^8.1.1",
-    "electron-builder": "^19.55.3"
+    "electron-builder": "^19.56.2",
+    "minimist": ">=1.2.2"
   },
   "dependencies": {},
   "files": [
@@ -33,50 +34,101 @@
     "node_modules"
   ],
   "build": {
-    "appId": "at.rh-utensils.musicplayer.desktop",
+    "appId": "net.hampoelz.rh-utensils.music.desktop",
     "productName": "RH Music Player",
     "copyright": "Copyright © 2020 Hampis Projekte",
-    "mac": {},
-    "dmg": {},
-    "mas": {},
     "win": {
       "target": [
-        {
-          "target": "appx"
-        },
-        {
-          "target": "portable"
-        }
+        "appx",
+        "nsis",
+        "portable"
       ],
-      "icon": "build/icon.ico",
+      "icon": "build/Logo.ico",
       "legalTrademarks": "Copyright © 2020 Hampis Projekte",
       "publisherName": "RH-Utensils"
     },
     "appx": {
-      "applicationId": "RH-Utensils.MusicPlayer",
+      "applicationId": "RHUtensils.MusicPlayer",
       "backgroundColor": "#0D47A1",
       "displayName": "RH Music",
       "identityName": "43854RH-Programm.2854494CCC3AF",
       "publisher": "CN=765089AC-7879-4AB6-97BC-DCAE302E4761",
       "publisherDisplayName": "RH Utensils",
       "languages": [
+        "en",
         "de"
       ]
     },
-    "portable": {},
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage"
-        }
-      ],
-      "maintainer": "RH-Utensils",
-      "vendor": "music.hampoelz.net",
-      "synopsis": "RH Music",
-      "category": "Office"
+    "nsis": {
+      "perMachine": true,
+      "oneClick": true
     },
-    "appImage": {
-      "systemIntegration": "doNotAsk"
-    }
+    "portable": {},
+    "fileAssociations": [
+      {
+        "ext": [
+          "music",
+          "radio"
+        ],
+        "name": "RH Music Universal",
+        "description": "RH Music native file extension",
+        "icon": "build/fileAssociations/file-settings-outline.ico"
+      },
+      {
+        "ext": "flac",
+        "name": "FLAC",
+        "description": "Free Lossless Audio Codec file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "m4a",
+        "name": "MP3",
+        "description": "MPEG-4 Audio file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "mp3",
+        "name": "MP3",
+        "description": "MPEG-1 Audio Layer 3 file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "ogg",
+        "name": "OGG",
+        "description": "Ogg Vorbis Audio file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "opus",
+        "name": "Opus",
+        "description": "Opus Audio file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "webm",
+        "name": "WebM",
+        "description": "WebM Audio file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": "wav",
+        "name": "MP3",
+        "description": "WAVE Audio file extension",
+        "icon": "build/fileAssociations/file-music-outline.ico"
+      },
+      {
+        "ext": [
+          "m3u",
+          "vlc",
+          "m3u8",
+          "xspf",
+          "b4s",
+          "jspf"
+        ],
+        "name": "Playlist",
+        "description": "3rd Party playlist file extension (coming soon)",
+        "icon": "build/fileAssociations/file-cancel-outline.ico"
+      }
+    ]
   }
 }
