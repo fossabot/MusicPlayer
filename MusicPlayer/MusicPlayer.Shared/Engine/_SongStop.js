@@ -2,7 +2,7 @@
     var audio = document.getElementById("audio");
 
     audio.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAVFYAAFRWAAABAAgAZGF0YQAAAAA=";
-    audio.pause();
+    if (audio.play() !== undefined) { audio.play().then(() => audio.pause()) }
 }
 
 Main();
