@@ -58,7 +58,8 @@
                     </Canvas>
                 </Viewbox>
             </Border>
-            <TextBlock Text="RH Music" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="55,0,0,0" />
+            <TextBlock Text="RH Music" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       Margin="55,0,0,0" />
 
             <Border x:Name="WindowMinimizeButton" Background="#2E7D32" CornerRadius="7" Width="15" Height="15"
                     VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,80,0"
