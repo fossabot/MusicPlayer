@@ -2,6 +2,8 @@
     var tmpTitle = document.getElementById("tmpTitle");
     var type = "$Type";
 
+    tmpTitle.innerHTML = "";
+
     if (type == "youtube") {
         const data = JSON.parse(atob("$Json"));
         tmpTitle.innerHTML = btoa(encodeURIComponent(data.title));
@@ -13,7 +15,7 @@
 
         if ($isLocalFile) {
             window.ipcRenderer.send("requestBlobUrl", url);
-            window.ipcRenderer.on("getBlobUrl", (event, blobUrl) => getTitle(blobUrl));
+            window.ipcRenderer.once("getBlobUrl", (event, blobUrl) => getTitle(blobUrl));
         } else getTitle(url);
 
         async function getTitle(blobUrl) {

@@ -6,7 +6,7 @@
 
     if ($isLocalFile) {
         window.ipcRenderer.send("requestBlobUrl", url);
-        window.ipcRenderer.on("getBlobUrl", (event, blobUrl) => Play(blobUrl));
+        window.ipcRenderer.once("getBlobUrl", (event, blobUrl) => Play(blobUrl));
     } else Play(url);
 
     function Play(playBackUrl) {
@@ -17,7 +17,7 @@
 
         if (!window.audioContext) window.audioContext = new (window.AudioContext || window.webkitAudioContext);
 
-        var useRenderFrame = this.source == undefined;
+        var alreadyLoaded = this.source != undefined;
 
         if (this.source == undefined) this.source = window.audioContext.createMediaElementSource(audio);
 
@@ -47,9 +47,7 @@
 
         renderSize();
 
-        window.onresize = function() {
-            renderSize();
-        };
+        if (!alreadyLoaded) window.onresize = function() { renderSize(); };
 
         function renderSize() {
             canvas.width = (window.innerWidth - 40);
@@ -121,7 +119,7 @@
 
         audio.play();
 
-        if (useRenderFrame) renderFrame();
+        if (!alreadyLoaded) renderFrame();
     }
 }
 

@@ -62,7 +62,6 @@ namespace MusicPlayer.Shared.Engine
                         timeout.Start();
 
                         var tmpTitle = "";
-                        WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML = '';");
 
                         while (string.IsNullOrEmpty(tmpTitle))
                         {
@@ -84,7 +83,8 @@ namespace MusicPlayer.Shared.Engine
                     return new Song {Title = await GetTitleAsync(), Uri = sUri, Provider = SongProvider.YouTube};
                 }
             }
-            else if (SongExt.Contains(Path.GetExtension(fileName), StringComparer.OrdinalIgnoreCase))
+            else if (fileName != null &&
+                     SongExt.Contains(Path.GetExtension(fileName), StringComparer.OrdinalIgnoreCase))
             {
                 async Task<string> GetTitle()
                 {
@@ -103,7 +103,6 @@ namespace MusicPlayer.Shared.Engine
                     timeout.Start();
 
                     var tmpTitle = "";
-                    WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML = '';");
 
                     while (string.IsNullOrEmpty(tmpTitle))
                     {
