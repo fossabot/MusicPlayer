@@ -9,7 +9,7 @@ self.addEventListener('install', function (e) {
             .then(r => r.text()
                 .then(configStr => {
                     eval(configStr);
-                    caches.open('managed-57bc30c199c2b5e49aa553a071be9f42e2bd524b').then(function (cache) {
+                    caches.open('managed-7887a71422d167d0b705fd960b17da0190d90e55').then(function (cache) {
                         console.debug('[ServiceWorker] Caching app binaries and content');
                         return cache.addAll(config.offline_files);
                     });
@@ -38,4 +38,4 @@ self.addEventListener('fetch', event => {
 });
 
 
-// managed-57bc30c199c2b5e49aa553a071be9f42e2bd524b
+// managed-7887a71422d167d0b705fd960b17da0190d90e55
