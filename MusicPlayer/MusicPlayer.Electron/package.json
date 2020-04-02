@@ -1,7 +1,7 @@
 {
   "name": "musicapp",
   "productName": "RH Music App",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Electron Desktop App Wrapper for the RH Music PWA",
   "homepage": "https://music.hampoelz.net/",
   "main": "index.js",
@@ -23,8 +23,8 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
-    "electron": "^8.1.1",
-    "electron-builder": "^19.56.2",
+    "electron": "^8.2.0",
+    "electron-builder": "^22.1.0",
     "minimist": ">=1.2.2"
   },
   "dependencies": {},
@@ -39,9 +39,29 @@
     "copyright": "Copyright © 2020 Hampis Projekte",
     "win": {
       "target": [
-        "appx",
-        "nsis",
-        "portable"
+        {
+          "target": "appx",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        }
       ],
       "icon": "build/Logo.ico",
       "legalTrademarks": "Copyright © 2020 Hampis Projekte",
