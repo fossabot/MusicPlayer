@@ -396,7 +396,6 @@ namespace MusicPlayer.Shared.Engine
 
         #endregion
 
-
         #region Properties
 
         private bool _isPlaying;
@@ -446,9 +445,9 @@ namespace MusicPlayer.Shared.Engine
             {
                 if (_isMuted.Equals(value) || !_isLoaded) return;
 
-                _isMuted = value;
+                RunFunction("setMute", new[] { ("$IsMuted", value.ToString().ToLower()) });
 
-                Volume = value ? 0 : Volume;
+                _isMuted = value;
 
                 OnPropertyChanged();
             }
@@ -549,7 +548,7 @@ namespace MusicPlayer.Shared.Engine
 
                 RunFunction("setVolume", new[] {("$Volume", (value / 100).ToString(CultureInfo.InvariantCulture))});
 
-                if (!IsMuted) _volume = value;
+                _volume = value;
 
                 OnPropertyChanged();
             }

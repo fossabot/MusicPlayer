@@ -97,4 +97,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\getWebmUrl.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\_SongStop.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Engine\setMute.js" />
+  </ItemGroup>
 </Project>
