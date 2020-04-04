@@ -37,7 +37,11 @@ namespace MusicPlayer.Shared.Engine
         {
             if (!_isLoaded) return null;
 
-            if (!Uri.TryCreate(url, UriKind.Absolute, out var sUri)) return null;
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var sUri))
+            {
+                //TODO: Link is not valid
+                return null;
+            }
 
             if (sUri.Scheme == Uri.UriSchemeFile) fileName = Path.GetFileName(sUri.ToString());
 
@@ -56,7 +60,22 @@ namespace MusicPlayer.Shared.Engine
                         var json = await httpClient.GetStringAsync(
                             "https://stream.api.rh-utensils.hampoelz.net/getInfos.php?url=" + sUri);
 
-                        RunFunction("getTitle", new[] {("$Type", "youtube"), ("$Json", Base64Encode(json))});
+                        if (json.Equals("Not Found"))
+                        {
+                            //TODO: YouTube Video not found
+                            return null;
+                        }
+                        else if (string.IsNullOrEmpty(json))
+                        {
+                            //TODO: YouTube Video fetch error
+                            return null;
+                        }
+
+                        var id = new Random().Next().ToString();
+
+                        WebAssemblyRuntime.InvokeJS("var tmpTitle = document.createElement('p'); tmpTitle.id = 'tmpTitle-" + id + "'; document.getElementById('canvas').appendChild(tmpTitle);");
+
+                        RunFunction("getTitle", new[] { ("$Id", id), ("$Type", "youtube"), ("$Json", Base64Encode(json))});
 
                         var timeout = new Stopwatch();
                         timeout.Start();
@@ -68,7 +87,7 @@ namespace MusicPlayer.Shared.Engine
                             await Task.Delay(100);
 
                             tmpTitle = Uri.UnescapeDataString(Base64Decode(
-                                WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML;")));
+                                WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle-" + id + "').innerHTML;")));
 
                             if (timeout.ElapsedMilliseconds <= 5000) continue;
 
@@ -76,11 +95,13 @@ namespace MusicPlayer.Shared.Engine
                             break;
                         }
 
-                        WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML = '';");
+                        WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle-" + id + "').remove();");
                         return tmpTitle.Equals("null") ? "Unknown YouTube Video" : tmpTitle;
                     }
 
-                    return new Song {Title = await GetTitleAsync(), Uri = sUri, Provider = SongProvider.YouTube};
+                    var sTitle = await GetTitleAsync();
+
+                    return sTitle == null ? null : new Song {Title = sTitle, Uri = sUri, Provider = SongProvider.YouTube};
                 }
             }
             else if (fileName != null &&
@@ -90,9 +111,14 @@ namespace MusicPlayer.Shared.Engine
                 {
                     if (!string.IsNullOrEmpty(title)) return title;
 
+                    var id = new Random().Next().ToString();
+
+                    WebAssemblyRuntime.InvokeJS("var tmpTitle = document.createElement('p'); tmpTitle.id = 'tmpTitle-" + id + "'; document.getElementById('canvas').appendChild(tmpTitle);");
+
                     RunFunction("getTitle",
                         new[]
                         {
+                            ("$Id", id),
                             ("$Type", "file"),
                             ("$isLocalFile", (sUri.Scheme == Uri.UriSchemeFile).ToString().ToLower()),
                             ("$Url", Base64Encode(Uri.EscapeDataString(sUri.ToString()))),
@@ -110,7 +136,7 @@ namespace MusicPlayer.Shared.Engine
 
                         tmpTitle = Uri.UnescapeDataString(
                             Base64Decode(
-                                WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML;")));
+                                WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle-" + id + "').innerHTML;")));
 
                         if (timeout.ElapsedMilliseconds <= 5000) continue;
 
@@ -118,7 +144,7 @@ namespace MusicPlayer.Shared.Engine
                         break;
                     }
 
-                    WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle').innerHTML = '';");
+                    WebAssemblyRuntime.InvokeJS("document.getElementById('tmpTitle-" + id + "').remove();");
                     return tmpTitle.Equals("null")
                         ? Path.GetFileNameWithoutExtension(fileName)
                         : tmpTitle;
@@ -127,6 +153,8 @@ namespace MusicPlayer.Shared.Engine
                 return new Song {Title = await GetTitle(), Uri = sUri, Provider = SongProvider.File};
             }
 
+
+            //TODO: Fetch error
             return null;
         }
 
@@ -252,6 +280,12 @@ namespace MusicPlayer.Shared.Engine
         {
             if (!_isLoaded) return;
 
+            if (song == null)
+            {
+                //TODO: Can't play Song
+                return;
+            }
+
             var audioUrl = "";
 
             switch (song.Provider)
@@ -269,6 +303,12 @@ namespace MusicPlayer.Shared.Engine
                     json = Regex.Replace(json, @"\t|\n|\r|    ", string.Empty);
 
                     var webmUrl = Base64Decode(RunFunction("getWebmUrl", new[] {("$Json", Base64Encode(json))}));
+
+                    if (string.IsNullOrEmpty(webmUrl))
+                    {
+                        //TODO: Not supported YouTube Video
+                        return;
+                    }
 
                     audioUrl = "https://stream.api.rh-utensils.hampoelz.net/stream.php?url=" + webmUrl;
                     break;
@@ -356,7 +396,6 @@ namespace MusicPlayer.Shared.Engine
 
         #endregion
 
-        // TODO: --> In Progress: Add Playlist function (Repeat / Shuffle)
 
         #region Properties
 
@@ -528,7 +567,6 @@ namespace MusicPlayer.Shared.Engine
 
             var html = "<canvas id=\"canvas\" style=\"position: fixed; left: 0; top: 0; width: 100%; height: 100%;\">" +
                        "<audio id=\"audio\" preload=\"none\" style=\"visibility:hidden;\" controls autoplay></audio>" +
-                       "<p id=\"tmpTitle\" style=\"visibility:hidden;\"></p>" +
                        "<input id=\"select\" style=\"visibility:hidden;\" type=\"file\" accept=\"" +
                        string.Join(",", fileExtArray) + "\">" +
                        "</canvas>";

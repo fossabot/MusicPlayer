@@ -1,5 +1,5 @@
 ﻿function Main() {
-    var tmpTitle = document.getElementById("tmpTitle");
+    var tmpTitle = document.getElementById("tmpTitle-$Id");
     var type = "$Type";
 
     tmpTitle.innerHTML = "";

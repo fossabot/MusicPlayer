@@ -5,6 +5,8 @@
         return link["format"].indexOf("webm, audio") !== -1;
     });
 
+    if (first == undefined) return "";
+
     return btoa(encodeURIComponent(first["url"]));
 }
 
